@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  --color-muted: #6b6b6b;
+  --color-muted-dark: #a3a3a3;
+  --color-line: #e5e5e5;
+  --color-line-dark: #2a2a2a;
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { @apply bg-paper text-ink font-sans antialiased; overflow-x: hidden; }
+section[id] { scroll-margin-top: 4.5rem; }
+#home { scroll-margin-top: 0; }
+:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 2px; }
+::selection { background: #000; color: #fff; }
+.btn { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-md border px-5 text-sm font-semibold transition-colors duration-200 active:scale-[0.98]; }
+.btn-solid { @apply border-ink bg-ink text-paper hover:bg-white hover:text-ink; }
+.btn-outline { @apply border-ink bg-transparent text-ink hover:bg-ink hover:text-paper; }
+.btn-solid-dark { @apply border-paper bg-paper text-ink hover:bg-ink hover:text-paper; }
+.btn-outline-dark { @apply border-paper bg-transparent text-paper hover:bg-paper hover:text-ink; }
