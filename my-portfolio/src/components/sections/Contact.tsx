@@ -38,8 +38,8 @@ function validate({ email, subject, message }: Values): Errors {
 
 const fieldClass = (invalid: boolean) =>
   [
-    'mt-2 w-full rounded-lg border bg-white px-4 py-3 text-base text-black placeholder:text-black/40',
-    'outline-none transition-colors focus-visible:ring-2 focus-visible:ring-black',
+    'mt-2 w-full rounded-lg border bg-paper px-4 py-3 text-base text-ink placeholder:text-black/40',
+    'outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ink',
     invalid ? 'border-red-600' : 'border-black/20 hover:border-black/40',
   ].join(' ')
 
@@ -96,7 +96,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" aria-labelledby="contact-h" className="bg-white text-black">
+    <section id="contact" aria-labelledby="contact-h" className="bg-paper text-ink">
       <Reveal className="mx-auto max-w-7xl px-5 py-24 sm:px-8 md:py-32">
         <h2 id="contact-h" className="max-w-4xl font-display text-[clamp(2rem,6vw,4.5rem)] font-extrabold leading-[1.02] tracking-tight">{headline}</h2>
         <p className="mt-6 max-w-xl text-lg text-muted">{text}</p>

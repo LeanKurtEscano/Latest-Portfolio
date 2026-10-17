@@ -25,7 +25,7 @@ export default function ProjectsPage() {
     <div className="mx-auto w-full max-w-6xl px-6 py-16 sm:py-24">
       <Link
         to="/#projects"
-        className="group inline-flex items-center gap-2 text-sm text-muted transition-colors duration-300 hover:text-black"
+        className="group inline-flex items-center gap-2 text-sm text-muted transition-colors duration-300 hover:text-ink"
       >
         <span aria-hidden className="transition-transform duration-300 group-hover:-translate-x-1">←</span>
         Back to home
@@ -45,7 +45,7 @@ export default function ProjectsPage() {
                 className={`rounded-full border px-4 py-1.5 text-sm transition-colors duration-300 ${
                   category === c
                     ? 'border-black bg-black text-white'
-                    : 'border-line text-muted hover:border-black hover:text-black'
+                    : 'border-line text-muted hover:border-ink hover:text-ink'
                 }`}
               >
                 {c}

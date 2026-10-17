@@ -47,7 +47,7 @@ export default function Modal({ title, titleId, onClose, children, headerActions
       <motion.div
         ref={panel}
         role="dialog" aria-modal="true" aria-labelledby={titleId}
-        className={`flex h-dvh w-full flex-col overflow-hidden bg-white text-black sm:h-auto sm:rounded-lg ${className}`}
+        className={`flex h-dvh w-full flex-col overflow-hidden bg-paper text-ink sm:h-auto sm:rounded-lg ${className}`}
         initial={{ opacity: 0, y: 24, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
       >

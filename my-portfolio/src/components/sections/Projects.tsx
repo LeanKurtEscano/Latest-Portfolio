@@ -20,7 +20,7 @@ export default function Projects() {
       <div className="mb-10 flex justify-end">
         <Link
           to="/projects"
-          className="group inline-flex items-center gap-2 rounded-md border border-black bg-black px-5 py-2.5 text-sm font-medium text-white transition-colors duration-300 hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+          className="group inline-flex items-center gap-2 rounded-md border border-ink bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors duration-300 hover:bg-paper hover:text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
         >
           View All Projects
           <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">→</span>

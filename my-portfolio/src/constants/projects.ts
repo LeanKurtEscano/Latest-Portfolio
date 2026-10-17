@@ -104,10 +104,10 @@ export const projects: Project[] = [
     'Linux',
     'VPS Deployment',
   ],
-  image: '/images/projects/cloud-disaster-recovery/cover.png',
+  image: '/assets/images/devops/grafana.png',
   images: [
-    '/images/projects/cloud-disaster-recovery/grafana-dashboard.png',
-    '/images/projects/cloud-disaster-recovery/infrastructure.png',
+    '/assets/images/devops/grafana.png',
+   
   ],
   featured: true,
 },

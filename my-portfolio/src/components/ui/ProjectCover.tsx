@@ -18,7 +18,7 @@ export default function ProjectCover({
           loading={variant === 'card' ? 'lazy' : undefined}
           className="h-full w-full object-contain p-3 pr-[28%]"
         />
-        <div className="absolute bottom-3 right-3 aspect-[9/19] h-[82%] overflow-hidden rounded-xl border border-line bg-white shadow-xl">
+        <div className="absolute bottom-3 right-3 aspect-[9/19] h-[82%] overflow-hidden rounded-xl border border-line bg-paper shadow-xl">
           <SafeImage
             src={project.mobileImage}
             alt={`${project.title} mobile cover`}
