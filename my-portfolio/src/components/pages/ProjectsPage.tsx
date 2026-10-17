@@ -58,8 +58,8 @@ export default function ProjectsPage() {
       <ul className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {visible.map((p) => (
           <li key={p.id}>
-            <button onClick={() => setSelectedId(p.id)} aria-haspopup="dialog" className="group block w-full text-left">
-              <div className="aspect-[4/3] overflow-hidden rounded-md border border-line bg-neutral-100">
+            <button onClick={() => setSelectedId(p.id)} aria-haspopup="dialog" className="group block w-full rounded-lg text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink">
+              <div className="aspect-[4/3] overflow-hidden rounded-lg border border-line bg-neutral-100 transition-colors duration-200 group-hover:border-ink">
                 <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.04]">
                   <ProjectCover project={p} variant="card" />
                 </div>
@@ -67,7 +67,13 @@ export default function ProjectsPage() {
               <p className="mt-5 text-sm text-muted">{p.category}{hasValue(p.status) && ` · ${p.status}`}</p>
               <h3 className="mt-1 font-display text-2xl font-bold underline-offset-[6px] decoration-2 group-hover:underline">{p.title}</h3>
               <p className="mt-2 line-clamp-2 text-muted">{p.description}</p>
-              <p className="mt-3 text-sm font-medium">{p.technologies.join(' · ')}</p>
+              <div className="mt-3 flex flex-wrap gap-2" aria-label={`${p.title} technologies`}>
+                {p.technologies.map((technology) => (
+                  <span key={technology} className="rounded-full border border-line px-2.5 py-1 text-xs font-medium text-muted">
+                    {technology}
+                  </span>
+                ))}
+              </div>
             </button>
 
             {hasValue(p.playStoreUrl) && (

@@ -14,7 +14,7 @@ export default function Certifications() {
     <Section id="certifications" heading="Certifications and training">
       <ul className="border-t border-line">
         {certifications.toReversed().map((c) => (
-          <li key={`${c.title}-${c.date}`} className="border-b border-line py-6">
+          <li key={`${c.title}-${c.date}`} className="border-b border-line py-6 transition-colors hover:bg-surface sm:px-4">
             <div className="flex items-start justify-between gap-6">
               <div className="min-w-0">
                 <h3 className="font-display text-xl font-bold">{c.title}</h3>

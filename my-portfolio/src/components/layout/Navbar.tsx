@@ -111,13 +111,19 @@ const handleThemeToggle = () => {
                     href={`/#${l.id}`}
                     onClick={go(l.id)}
                     aria-current={isActive ? 'true' : undefined}
-                    className={`border-b-2 py-1 text-sm font-medium transition-colors ${
+                    className={`group relative py-1 text-sm font-medium transition-colors ${
                       isActive
-                        ? 'border-ink text-ink'
-                        : 'border-transparent text-muted hover:text-ink'
+                        ? 'text-ink'
+                        : 'text-muted hover:text-ink'
                     }`}
                   >
                     {l.label}
+                    <span
+                      aria-hidden
+                      className={`absolute inset-x-0 -bottom-1 h-px origin-left bg-ink transition-transform duration-200 ${
+                        isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                      }`}
+                    />
                   </a>
                 </li>
               )

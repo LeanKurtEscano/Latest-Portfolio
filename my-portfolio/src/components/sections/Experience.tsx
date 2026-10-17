@@ -7,7 +7,7 @@ export default function Experience() {
     <Section id="experience" heading="Experience">
       <ol className="border-t border-line">
         {timeline.map((e) => (
-          <li key={`${e.title}-${e.period}`} className="grid gap-2 border-b border-line py-7 sm:grid-cols-[10rem_1fr] sm:gap-8">
+          <li key={`${e.title}-${e.period}`} className="group grid gap-2 border-b border-line py-7 transition-colors hover:bg-surface sm:grid-cols-[10rem_1fr] sm:gap-8 sm:px-4">
             <p className="text-sm text-muted">{e.period}</p>
             <div>
               <h3 className="font-display text-xl font-bold">{e.title}</h3>

@@ -14,7 +14,7 @@ export default function Awards() {
     <Section id="awards" heading="Awards">
       <ul className="border-t border-line">
         {awards.map((a) => (
-          <li key={`${a.title}-${a.date}`} className="grid gap-2 border-b border-line py-7 sm:grid-cols-[10rem_1fr] sm:gap-8">
+          <li key={`${a.title}-${a.date}`} className="grid gap-2 border-b border-line py-7 transition-colors hover:bg-surface sm:grid-cols-[10rem_1fr] sm:gap-8 sm:px-4">
             <p className="text-sm text-muted">{a.date}</p>
             <div>
               <h3 className="font-display text-xl font-bold">{a.title}</h3>
