@@ -1,24 +1,30 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useLayoutEffect, useMemo, useState, type ReactNode } from 'react'
 import ThemeContext from './ThemeContext'
 
 function getInitialTheme(): 'light' | 'dark' {
-  const saved = localStorage.getItem('portfolio-theme')
-  if (saved === 'light' || saved === 'dark') return saved
+  try {
+    const saved = localStorage.getItem('portfolio-theme')
+    if (saved === 'light' || saved === 'dark') return saved
+  } catch {}
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
 export default function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState(() => getInitialTheme())
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => getInitialTheme())
 
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark')
-    document.documentElement.style.colorScheme = theme
-    localStorage.setItem('portfolio-theme', theme)
+  useLayoutEffect(() => {
+    const root = document.documentElement
+    root.classList.toggle('dark', theme === 'dark')
+    root.style.colorScheme = theme
+    try { localStorage.setItem('portfolio-theme', theme) } catch {}
   }, [theme])
 
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme: () => setTheme((value) => value === 'light' ? 'dark' : 'light') }}>
-      {children}
-    </ThemeContext.Provider>
+  const toggleTheme = useCallback(
+    () => setTheme((v) => (v === 'light' ? 'dark' : 'light')),
+    [],
   )
+
+  const value = useMemo(() => ({ theme, toggleTheme }), [theme, toggleTheme])
+
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }

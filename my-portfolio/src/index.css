@@ -58,3 +58,23 @@ section[id] { scroll-margin-top: 4.5rem; }
 .dark .text-black\/50 { color: rgb(161 161 170 / 0.7); }
 .dark .border-black\/20 { border-color: rgb(161 161 170 / 0.25); }
 .dark .hover\:border-black\/40:hover { border-color: rgb(161 161 170 / 0.5); }
+
+
+
+/* Turn off the default cross-fade; we animate the reveal ourselves */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* New theme sits on top so the expanding circle reveals it */
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }
+
+/* Stop transition-colors on elements from fighting the reveal */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}

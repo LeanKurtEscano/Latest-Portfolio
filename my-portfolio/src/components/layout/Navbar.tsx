@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useRef } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'motion/react'
 import { Menu, Moon, Sun, X } from 'lucide-react'
@@ -6,7 +6,7 @@ import { useTheme } from '../../context/useTheme'
 import { navLinks, siteConfig } from '../../constants/site'
 import { useActiveSection } from '../../hooks/useActiveSection'
 import { scrollToSection, scrollToTop } from '../../lib'
-
+import { flushSync } from 'react-dom'
 const ids = navLinks.map((l) => l.id)
 
 export default function Navbar() {
@@ -15,6 +15,55 @@ export default function Navbar() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const { theme, toggleTheme } = useTheme()
+
+  const themeBtnRef = useRef<HTMLButtonElement>(null)
+
+const handleThemeToggle = () => {
+  const btn = themeBtnRef.current
+  const root = document.documentElement
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  // Fallback: no support or reduced motion -> plain toggle
+  if (!btn || reduceMotion || !document.startViewTransition) {
+    toggleTheme()
+    return
+  }
+
+  // Origin = center of the toggle button
+  const { left, top, width, height } = btn.getBoundingClientRect()
+  const x = left + width / 2
+  const y = top + height / 2
+
+  // Radius to the farthest corner so the circle covers the whole screen
+  const radius = Math.hypot(
+    Math.max(x, window.innerWidth - x),
+    Math.max(y, window.innerHeight - y),
+  )
+
+  root.classList.add('theme-switching')
+
+  const transition = document.startViewTransition(() => {
+    flushSync(() => toggleTheme())
+  })
+
+  transition.ready.then(() => {
+    root.animate(
+      {
+        clipPath: [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${radius}px at ${x}px ${y}px)`,
+        ],
+      },
+      {
+        duration: 700,
+        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        pseudoElement: '::view-transition-new(root)',
+      },
+    )
+  })
+
+  transition.finished.finally(() => root.classList.remove('theme-switching'))
+}
 
   const isHome = pathname !== '/projects'
 
@@ -77,8 +126,9 @@ export default function Navbar() {
 
           <div className="flex items-center gap-1 md:border-l md:border-line md:pl-6">
             <button
+            ref={themeBtnRef}
               type="button"
-              onClick={toggleTheme}
+              onClick={handleThemeToggle}
               aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
               className="inline-flex size-11 items-center justify-center rounded-md border border-line text-ink transition-colors hover:bg-surface focus-visible:ring-2 focus-visible:ring-ink"
             >
