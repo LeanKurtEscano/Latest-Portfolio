@@ -38,9 +38,9 @@ function validate({ email, subject, message }: Values): Errors {
 
 const fieldClass = (invalid: boolean) =>
   [
-    'mt-2 w-full rounded-lg border bg-white/5 px-4 py-3 text-base text-white placeholder:text-white/40',
-    'outline-none transition-colors focus-visible:ring-2 focus-visible:ring-white',
-    invalid ? 'border-red-400' : 'border-white/20 hover:border-white/40',
+    'mt-2 w-full rounded-lg border bg-white px-4 py-3 text-base text-black placeholder:text-black/40',
+    'outline-none transition-colors focus-visible:ring-2 focus-visible:ring-black',
+    invalid ? 'border-red-600' : 'border-black/20 hover:border-black/40',
   ].join(' ')
 
 export default function Contact() {
@@ -86,20 +86,20 @@ export default function Contact() {
       const data = await res.json().catch(() => ({}))
       if (!res.ok || data.success === 'false' || data.success === false) throw new Error('Request failed')
 
-      setStatus('success');
-      setValues(EMPTY);
-      setTouched(NOT_TOUCHED);
+      setStatus('success')
+      setValues(EMPTY)
+      setTouched(NOT_TOUCHED)
     } catch (err) {
-      console.log('Contact form error:', err);
-      setStatus('error');
+      console.log('Contact form error:', err)
+      setStatus('error')
     }
   }
 
   return (
-    <section id="contact" aria-labelledby="contact-h" className="bg-black text-white">
+    <section id="contact" aria-labelledby="contact-h" className="bg-white text-black">
       <Reveal className="mx-auto max-w-7xl px-5 py-24 sm:px-8 md:py-32">
         <h2 id="contact-h" className="max-w-4xl font-display text-[clamp(2rem,6vw,4.5rem)] font-extrabold leading-[1.02] tracking-tight">{headline}</h2>
-        <p className="mt-6 max-w-xl text-lg text-muted-dark">{text}</p>
+        <p className="mt-6 max-w-xl text-lg text-muted">{text}</p>
 
         <form onSubmit={handleSubmit} noValidate className="mt-10 max-w-xl" aria-describedby="contact-status">
           {/* Honeypot field (hidden from people and screen readers) */}
@@ -121,7 +121,7 @@ export default function Contact() {
               className={fieldClass(!!showError('email'))}
             />
             {showError('email') && (
-              <p id="contact-email-error" role="alert" className="mt-2 text-sm text-red-400">{errors.email}</p>
+              <p id="contact-email-error" role="alert" className="mt-2 text-sm text-red-600">{errors.email}</p>
             )}
           </div>
 
@@ -141,14 +141,14 @@ export default function Contact() {
               className={fieldClass(!!showError('subject'))}
             />
             {showError('subject') && (
-              <p id="contact-subject-error" role="alert" className="mt-2 text-sm text-red-400">{errors.subject}</p>
+              <p id="contact-subject-error" role="alert" className="mt-2 text-sm text-red-600">{errors.subject}</p>
             )}
           </div>
 
           <div className="mt-6">
             <div className="flex items-baseline justify-between">
               <label htmlFor="contact-message" className="text-sm font-semibold">Message</label>
-              <span className={`text-xs ${values.message.length > LIMITS.messageMax ? 'text-red-400' : 'text-white/50'}`}>
+              <span className={`text-xs ${values.message.length > LIMITS.messageMax ? 'text-red-600' : 'text-black/50'}`}>
                 {values.message.length}/{LIMITS.messageMax}
               </span>
             </div>
@@ -165,18 +165,18 @@ export default function Contact() {
               className={`${fieldClass(!!showError('message'))} resize-y`}
             />
             {showError('message') && (
-              <p id="contact-message-error" role="alert" className="mt-2 text-sm text-red-400">{errors.message}</p>
+              <p id="contact-message-error" role="alert" className="mt-2 text-sm text-red-600">{errors.message}</p>
             )}
           </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-4">
-            <button type="submit" disabled={status === 'sending'} className="btn btn-solid-dark disabled:cursor-not-allowed disabled:opacity-60">
+            <button type="submit" disabled={status === 'sending'} className="btn btn-solid disabled:cursor-not-allowed disabled:opacity-60">
               <Send size={16} aria-hidden /> {status === 'sending' ? 'Sending…' : 'Send message'}
             </button>
             <p id="contact-status" role="status" aria-live="polite" className="text-sm">
-              {status === 'success' && <span className="text-green-400">Message sent. Thank you!</span>}
+              {status === 'success' && <span className="text-green-700">Message sent. Thank you!</span>}
               {status === 'error' && (
-                <span className="text-red-400">Message not sent. Check your connection and try again.</span>
+                <span className="text-red-600">Message not sent. Check your connection and try again.</span>
               )}
             </p>
           </div>

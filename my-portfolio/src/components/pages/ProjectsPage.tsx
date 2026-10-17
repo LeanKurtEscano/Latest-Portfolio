@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react'
 import { AnimatePresence } from 'motion/react'
 import { Link } from 'react-router-dom'
-import SafeImage from '../ui/SafeImage'
 import ProjectModal from '../ProjectModal'
+import ProjectCover from '../ui/ProjectCover'
+import SafeImage from '../ui/SafeImage'
 import { hasValue } from '../../constants/site'
 import { projects } from '../../constants/projects'
 
@@ -59,16 +60,32 @@ export default function ProjectsPage() {
           <li key={p.id}>
             <button onClick={() => setSelectedId(p.id)} aria-haspopup="dialog" className="group block w-full text-left">
               <div className="aspect-[4/3] overflow-hidden rounded-md border border-line bg-neutral-100">
-                <SafeImage
-                  src={p.image} alt={`${p.title} cover`} loading="lazy" width={800} height={600}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                />
+                <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.04]">
+                  <ProjectCover project={p} variant="card" />
+                </div>
               </div>
               <p className="mt-5 text-sm text-muted">{p.category}{hasValue(p.status) && ` · ${p.status}`}</p>
               <h3 className="mt-1 font-display text-2xl font-bold underline-offset-[6px] decoration-2 group-hover:underline">{p.title}</h3>
               <p className="mt-2 line-clamp-2 text-muted">{p.description}</p>
               <p className="mt-3 text-sm font-medium">{p.technologies.join(' · ')}</p>
             </button>
+
+            {hasValue(p.playStoreUrl) && (
+              <a
+                href={p.playStoreUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Get ${p.title} on Google Play`}
+                className="mt-4 inline-block transition-opacity duration-300 hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+              >
+                <SafeImage
+                  src="/assets/images/google-play-badge.png"
+                  alt="Get it on Google Play"
+                  loading="lazy"
+                  className="h-12 w-auto"
+                />
+              </a>
+            )}
           </li>
         ))}
       </ul>

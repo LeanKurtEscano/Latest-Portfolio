@@ -13,17 +13,45 @@ import ResumeViewer from './ResumeViewer'
 import Certifications from './sections/Certifications'
 import Awards from './sections/Awards'
 import ProjectsPage from './pages/ProjectsPage'
+import { scrollToSection } from '../lib'
 
 function ScrollManager() {
   const { pathname, hash } = useLocation()
+
   useEffect(() => {
-    if (hash) {
-      // short delay so the homepage sections are mounted before scrolling
-      const t = setTimeout(() => document.querySelector(hash)?.scrollIntoView({ behavior: 'smooth' }), 50)
-      return () => clearTimeout(t)
+    // no hash: normal page change, jump to top
+    if (!hash) {
+      window.scrollTo(0, 0)
+      return
     }
+
+    const id = hash.slice(1)
+    let tries = 0
+    let raf = 0
+
+    // start from the top so the scroll doesn't begin mid-page from /projects
     window.scrollTo(0, 0)
+
+    const attempt = () => {
+      if (document.getElementById(id)) {
+        scrollToSection(id)
+        return
+      }
+      // section not mounted yet, keep retrying for ~1s
+      if (tries++ < 60) raf = requestAnimationFrame(attempt)
+    }
+
+    // small delay lets the new route mount and settle first
+    const t = setTimeout(() => {
+      raf = requestAnimationFrame(attempt)
+    }, 100)
+
+    return () => {
+      clearTimeout(t)
+      cancelAnimationFrame(raf)
+    }
   }, [pathname, hash])
+
   return null
 }
 
