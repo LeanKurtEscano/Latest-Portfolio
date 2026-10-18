@@ -3,7 +3,7 @@ export interface SocialLink { label: string; url: string }
 export const siteConfig = {
   name: '<Lean/>',
   title: 'Software Developer',
-  profileImage: '../../public/assets/images/profile.png',
+profileImage: '/assets/images/profile.png',
   resumeUrl: '/files/escano_latest.pdf',
 
   hero: {
@@ -32,11 +32,11 @@ export const siteConfig = {
   contact: {
     headline: 'Have an interesting problem to solve?',
     text: "I'm open to conversations about software, backend systems, mobile apps, and AI projects.",
-    email: 'hello@example.com', // placeholder: replace with your email
+    email: 'leankurtescano@gmail.com', // placeholder: replace with your email
     // Only links with a non-empty url are shown.
     socials: [
-      { label: 'GitHub', url: '' },
-      { label: 'LinkedIn', url: '' },
+      { label: 'GitHub', url: 'https://github.com/LeanKurtEscano' },
+      { label: 'LinkedIn', url: 'https://www.linkedin.com/in/leankurtescano/' },
     ] as SocialLink[],
   },
 }

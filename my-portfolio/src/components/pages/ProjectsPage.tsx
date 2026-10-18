@@ -3,7 +3,7 @@ import { AnimatePresence } from 'motion/react'
 import { Link } from 'react-router-dom'
 import ProjectModal from '../ProjectModal'
 import ProjectCover from '../ui/ProjectCover'
-import SafeImage from '../ui/SafeImage'
+
 import { hasValue } from '../../constants/site'
 import { projects } from '../../constants/projects'
 

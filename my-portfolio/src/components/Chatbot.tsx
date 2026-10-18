@@ -8,11 +8,11 @@ import { Bot, MessageCircle, RotateCcw, Send, X } from 'lucide-react'
 import { sendChatMessage, type ChatMessage } from '../lib/chatbot/client'
 
 const suggestedQuestions = [
-  'Tell me about yourself',
-  'What projects have you built?',
-  'What is your tech stack?',
-  'Tell me about your experience',
-  'How can I contact you?',
+  'Who is Lean Kurt Escano?',
+  'What projects has Lean built?',
+  'What technologies does Lean specialize in?',
+  'What is Lean’s experience in AI and software development?',
+  'How can I contact Lean?',
 ]
 
 /** Styles for rendered markdown (no typography plugin needed). */
