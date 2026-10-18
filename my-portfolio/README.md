@@ -2,6 +2,29 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## Portfolio AI assistant
+
+The floating assistant uses a Netlify Function to call Gemini without exposing the API key to the browser.
+
+1. Copy `.env.example` to `.env` and set:
+
+   ```env
+   GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_MODEL=gemini-2.5-flash
+   ```
+
+2. For local development, run the site through Netlify's local function runtime:
+
+   ```bash
+   npx netlify dev
+   ```
+
+   This starts Vite and proxies `/.netlify/functions/chat` to `netlify/functions/chat.ts`.
+
+3. Deploy with Netlify using the included `netlify.toml`. Set `GEMINI_API_KEY` and, optionally,
+   `GEMINI_MODEL` in the Netlify site environment variables. Never use a `VITE_` prefix for the
+   Gemini key and never commit `.env`.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)

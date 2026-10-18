@@ -13,6 +13,7 @@ import ResumeViewer from './ResumeViewer'
 import Certifications from './sections/Certifications'
 import Awards from './sections/Awards'
 import ProjectsPage from './pages/ProjectsPage'
+import Chatbot from './Chatbot'
 import { scrollToSection } from '../lib'
 
 function ScrollManager() {
@@ -84,6 +85,7 @@ export default function Portfolio() {
       </main>
       <Footer />
       <AnimatePresence>{resumeOpen && <ResumeViewer onClose={() => setResumeOpen(false)} />}</AnimatePresence>
+      <Chatbot />
     </>
   )
 }

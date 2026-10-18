@@ -2,12 +2,12 @@ export interface SocialLink { label: string; url: string }
 
 export const siteConfig = {
   name: '<Lean/>',
-  title: 'Software Developer / AI Engineer',
+  title: 'Software Developer',
   profileImage: '../../public/assets/images/profile.png',
   resumeUrl: '/files/escano_latest.pdf',
 
   hero: {
-    label: 'Software Developer · AI Engineer',
+    label: 'Software Developer',
     headline: 'Building Intelligent Software for Real-World Problems.',
     description:
       "I'm a software developer focused on building reliable applications, scalable backend systems, and AI-powered solutions that solve meaningful problems.",

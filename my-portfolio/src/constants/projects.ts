@@ -58,6 +58,7 @@ export const projects: Project[] = [
     video: '/assets/images/mary/tutorial.mp4',
     status: 'In development',
     featured: true,
+
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.maryapp.user',
   },
  {
@@ -79,11 +80,34 @@ export const projects: Project[] = [
     'Docker',
   ],
   websiteUrl: 'https://www.cfms-stamaria.com/officials-login',
-  image: '/images/projects/cfms/cover.png',
+    image: '/assets/images/cfms/Picture1.jpg',
   images: [
-    '/images/projects/cfms/dashboard.png',
-    '/images/projects/cfms/complaints.png',
-    '/images/projects/cfms/chatbot.png',
+    '/assets/images/cfms/Picture1.jpg',
+    '/assets/images/cfms/Picture2.jpg',
+    '/assets/images/cfms/Picture3.jpg',
+    '/assets/images/cfms/Picture4.jpg',
+    '/assets/images/cfms/Picture5.jpg',
+    '/assets/images/cfms/Picture6.jpg',
+    '/assets/images/cfms/Picture7.jpg',
+    '/assets/images/cfms/Picture8.jpg',
+    '/assets/images/cfms/Picture9.jpg',
+    '/assets/images/cfms/Picture10.jpg',
+    '/assets/images/cfms/Picture11.jpg',
+    '/assets/images/cfms/Picture12.jpg',
+    '/assets/images/cfms/Picture13.jpg',
+    '/assets/images/cfms/Picture14.jpg',
+    '/assets/images/cfms/Picture15.jpg',
+    '/assets/images/cfms/Picture16.jpg',
+    '/assets/images/cfms/Picture17.jpg',
+    '/assets/images/cfms/Picture18.jpg',
+    '/assets/images/cfms/Picture19.jpg',
+    '/assets/images/cfms/Picture20.jpg',
+    '/assets/images/cfms/Picture21.jpg',
+    '/assets/images/cfms/Picture22.jpg',
+    '/assets/images/cfms/Picture23.jpg',
+    '/assets/images/cfms/Picture24.jpg',
+    '/assets/images/cfms/Picture25.jpg',
+    '/assets/images/cfms/Picture26.jpg',
   ],
 
   featured: true,
@@ -147,6 +171,58 @@ export const projects: Project[] = [
   ],
   featured: true,
 },
+{
+  id: 'commission-accounting',
+  title: 'Commission Accounting System',
+  description:
+    'A full-stack commission management and accounting platform developed for a real estate company, serving 30+ agents with real-time commission tracking, hierarchical commission calculations, and financial performance analytics. Implemented custom commission rules to reduce manual computation errors by 95% and optimized PostgreSQL queries from 5.1 seconds to 0.9 seconds, while reducing monthly report generation from 3 hours to 15 minutes.',
+  category: 'Full Stack / Backend',
+  technologies: [
+    'Python',
+    'Django',
+    'Django REST Framework',
+    'PostgreSQL',
+  ],
+  image: '/assets/images/accounting/cover.jpg',
+  images: [
+    '/assets/images/accounting/cover.jpg',
+    '/assets/images/accounting/dashboard.jpg',
+    '/assets/images/accounting/create.jpg',
+     '/assets/images/accounting/manage.jpg',
+      '/assets/images/accounting/create.jpg',
+       '/assets/images/accounting/report.jpg',
+         '/assets/images/accounting/tracking.jpg',
+        '/assets/images/accounting/income.jpg',
+          '/assets/images/accounting/total.jpg',
+  ],
+  featured: false,
+},
+
+{
+  id: 'auri',
+  title: 'Auri — AI Voice Assistant',
+  description:
+    'A third-year Mobile Application Development midterm project that showcases an AI-powered voice assistant built with React Native and Expo. Auri enables natural voice conversations through speech-to-text using AssemblyAI, context-aware AI responses powered by Google Gemini, and natural-sounding speech synthesis with ElevenLabs. It also features Firebase Authentication and developer-aware background context for personalized interactions.',
+  category: 'Mobile App',
+  technologies: [
+    'React Native',
+    'Expo',
+    'Firebase Authentication',
+    'AssemblyAI',
+    'Google Gemini',
+    'ElevenLabs',
+  ],
+  video: '/assets/images/auri/auridemo.mp4',
+  image: '/assets/images/auri/home.jpg',
+  images: [
+    '/assets/images/auri/home.jpg',
+    '/assets/images/auri/login.jpg',
+    '/assets/images/auri/register.jpg',
+    '/assets/images/auri/fps.jpg',
+  ],
+  featured: true,
+  status: 'Completed',
+},
 
 
 {
@@ -176,32 +252,7 @@ export const projects: Project[] = [
 },
 
 
-{
-  id: 'commission-accounting',
-  title: 'Commission Accounting System',
-  description:
-    'A full-stack commission management and accounting platform developed for a real estate company, serving 30+ agents with real-time commission tracking, hierarchical commission calculations, and financial performance analytics. Implemented custom commission rules to reduce manual computation errors by 95% and optimized PostgreSQL queries from 5.1 seconds to 0.9 seconds, while reducing monthly report generation from 3 hours to 15 minutes.',
-  category: 'Full Stack / Backend',
-  technologies: [
-    'Python',
-    'Django',
-    'Django REST Framework',
-    'PostgreSQL',
-  ],
-  image: '/assets/images/accounting/cover.jpg',
-  images: [
-    '/assets/images/accounting/cover.jpg',
-    '/assets/images/accounting/dashboard.jpg',
-    '/assets/images/accounting/create.jpg',
-     '/assets/images/accounting/manage.jpg',
-      '/assets/images/accounting/create.jpg',
-       '/assets/images/accounting/report.jpg',
-         '/assets/images/accounting/tracking.jpg',
-        '/assets/images/accounting/income.jpg',
-          '/assets/images/accounting/total.jpg',
-  ],
-  featured: false,
-},
+
 
 {
   id: 'qualitysense',
@@ -233,6 +284,7 @@ export const projects: Project[] = [
          '/assets/images/quality/profile.jpg',
   ],
   websiteUrl: 'https://qualitysense.netlify.app/',
+  githubUrl: 'https://github.com/LeanKurtEscano/QualitySense',
   featured: false,
 },
 

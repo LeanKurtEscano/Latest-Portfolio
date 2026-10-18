@@ -81,3 +81,12 @@ section[id] { scroll-margin-top: 4.5rem; }
 .theme-switching *::after {
   transition: none !important;
 }
+
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]) {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}

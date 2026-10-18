@@ -12,7 +12,7 @@ export interface TimelineEntry {
 export const timeline: TimelineEntry[] = [
   {
     type: 'experience',
-    title: 'DevOps Engineer',
+    title: 'Junior DevOps Engineer',
     organization: 'Alpha Hustlers Trading Firm - Cloud Infrastructure & Disaster Recovery (Freelance)',
     period: 'September 2026 – Present',
     description:

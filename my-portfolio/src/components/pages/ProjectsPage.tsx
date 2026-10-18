@@ -76,22 +76,7 @@ export default function ProjectsPage() {
               </div>
             </button>
 
-            {hasValue(p.playStoreUrl) && (
-              <a
-                href={p.playStoreUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Get ${p.title} on Google Play`}
-                className="mt-4 inline-block transition-opacity duration-300 hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
-              >
-                <SafeImage
-                  src="/assets/images/google-play-badge.png"
-                  alt="Get it on Google Play"
-                  loading="lazy"
-                  className="h-12 w-auto"
-                />
-              </a>
-            )}
+            
           </li>
         ))}
       </ul>
