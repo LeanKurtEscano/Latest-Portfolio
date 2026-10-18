@@ -24,20 +24,15 @@ dist-ssr
 *.sw?
 
 # Images
-*.png
-*.jpg
-*.jpeg
+
 *.gif
 *.webp
 *.svg
 *.ico
-*.mp4
-# Documents
-*.pdf
+
 
 # Other files (optional)
-*.doc
-*.docx
+
 *.zip
 # Local Netlify folder
 .netlify
