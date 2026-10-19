@@ -32,7 +32,7 @@ const markdownComponents: Components = {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="font-medium underline underline-offset-2 hover:opacity-80"
+      className="break-words font-medium underline underline-offset-2 hover:opacity-80"
     >
       {children}
     </a>
@@ -42,7 +42,7 @@ const markdownComponents: Components = {
   ),
   hr: () => <hr className="my-3 border-line" />,
   pre: ({ children }) => (
-    <pre className="my-2 overflow-x-auto rounded-lg border border-line bg-paper p-3 text-xs leading-relaxed">
+    <pre className="my-2 max-w-full overflow-x-auto rounded-lg border border-line bg-paper p-3 text-xs leading-relaxed">
       {children}
     </pre>
   ),
@@ -50,11 +50,11 @@ const markdownComponents: Components = {
     const isBlock = /language-/.test(className ?? '') || String(children).includes('\n')
     if (isBlock) return <code className={className}>{children}</code>
     return (
-      <code className="rounded border border-line bg-paper px-1 py-0.5 text-[0.85em]">{children}</code>
+      <code className="break-words rounded border border-line bg-paper px-1 py-0.5 text-[0.85em]">{children}</code>
     )
   },
   table: ({ children }) => (
-    <div className="my-2 overflow-x-auto">
+    <div className="my-2 max-w-full overflow-x-auto">
       <table className="w-full border-collapse text-xs">{children}</table>
     </div>
   ),
@@ -126,10 +126,10 @@ function MessageBubble({
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
       <div
-        className={`max-w-[86%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
+        className={`max-w-[88%] break-words rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
           isUser
             ? 'whitespace-pre-wrap rounded-br-md bg-ink text-paper'
-            : 'min-w-0 break-words rounded-bl-md border border-line bg-surface text-ink'
+            : 'min-w-0 rounded-bl-md border border-line bg-surface text-ink'
         }`}
       >
         {isUser ? (
@@ -268,6 +268,18 @@ export default function Chatbot() {
     }
   }, [open])
 
+  // On phones the chat is a full modal, so stop the page behind it from scrolling
+  useEffect(() => {
+    if (!open) return
+    const isPhone = window.matchMedia('(max-width: 639px)').matches
+    if (!isPhone) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [open])
+
   // Called on every typed character so the view follows the text as it grows
   const scrollToEnd = useRef(() => {
     endRef.current?.scrollIntoView({ behavior: 'auto', block: 'nearest' })
@@ -314,20 +326,23 @@ export default function Chatbot() {
         {open && (
           <motion.section
             id="portfolio-chat"
+            role="dialog"
             aria-label="Chat with Lean's AI assistant"
             initial={{ opacity: 0, y: 12, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.96 }}
             transition={{ duration: 0.2 }}
-            className="absolute bottom-16 right-0 flex h-[min(680px,calc(100dvh-6rem))] w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-xl border border-line bg-paper shadow-2xl sm:bottom-[4.5rem] sm:h-[min(620px,calc(100dvh-7rem))] sm:w-[380px]"
+            // Phones: fixed + centered on screen (safe-area aware, uses dvh so Safari's bar can't cut it off).
+            // sm and up: anchored above the chat button, like before.
+            className="fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] top-[max(0.75rem,env(safe-area-inset-top))] m-auto flex h-[min(680px,calc(100dvh-1.5rem))] max-w-[420px] flex-col overflow-hidden rounded-2xl border border-line bg-paper shadow-2xl sm:absolute sm:inset-auto sm:bottom-[4.5rem] sm:right-0 sm:m-0 sm:h-[min(620px,calc(100dvh-7rem))] sm:w-[380px] sm:max-w-none sm:rounded-xl"
           >
-            <header className="flex items-center justify-between border-b border-line px-4 py-3">
-              <div className="flex items-center gap-3">
-                <span className="flex size-9 items-center justify-center rounded-full bg-ink text-paper" aria-hidden>
+            <header className="flex shrink-0 items-center justify-between border-b border-line px-4 py-3">
+              <div className="flex min-w-0 items-center gap-3">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-ink text-paper" aria-hidden>
                   <Bot size={18} />
                 </span>
-                <div>
-                  <h2 className="text-sm font-semibold">Lean's AI assistant</h2>
+                <div className="min-w-0">
+                  <h2 className="truncate text-sm font-semibold">Lean's AI assistant</h2>
                   <p className="flex items-center gap-1.5 text-xs text-muted">
                     <span className="size-1.5 rounded-full bg-green-500" aria-hidden />
                     Ready to help
@@ -338,15 +353,15 @@ export default function Chatbot() {
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close chat"
-                className="flex size-9 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface hover:text-ink"
+                className="flex size-10 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface hover:text-ink sm:size-9"
               >
                 <X size={18} aria-hidden />
               </button>
             </header>
 
-            <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4" aria-live="polite">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4" aria-live="polite">
               {messages.length === 0 && !loading && (
-                <div className="flex h-full flex-col justify-center">
+                <div className="flex min-h-full flex-col justify-center">
                   <div className="mb-5 text-center">
                     <p className="text-sm font-semibold">Ask me about Lean's work</p>
                     <p className="mt-1 text-xs text-muted">I can share details from this portfolio.</p>
@@ -357,7 +372,7 @@ export default function Chatbot() {
                         key={question}
                         type="button"
                         onClick={() => void submit(question)}
-                        className="w-full rounded-lg border border-line px-3 py-2 text-left text-sm text-muted transition-colors hover:border-ink hover:text-ink"
+                        className="w-full rounded-lg border border-line px-3 py-2.5 text-left text-sm text-muted transition-colors hover:border-ink hover:text-ink"
                       >
                         {question}
                       </button>
@@ -404,7 +419,10 @@ export default function Chatbot() {
               )}
             </div>
 
-            <form onSubmit={handleSubmit} className="border-t border-line p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+            <form
+              onSubmit={handleSubmit}
+              className="shrink-0 border-t border-line p-3"
+            >
               <div className="flex items-end gap-2 rounded-lg border border-line bg-surface p-1.5 focus-within:border-ink">
                 <textarea
                   ref={inputRef}
@@ -420,19 +438,22 @@ export default function Chatbot() {
                   rows={1}
                   placeholder="Ask a question..."
                   aria-label="Message"
-                  className="max-h-24 min-h-9 flex-1 resize-none bg-transparent px-2 py-2 text-sm text-ink outline-none placeholder:text-muted"
+                  // text-base (16px) on phones stops iOS Safari from auto-zooming when the input is focused
+                  className="max-h-24 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-base text-ink outline-none placeholder:text-muted sm:min-h-9 sm:text-sm"
                   disabled={loading}
                 />
                 <button
                   type="submit"
                   aria-label="Send message"
                   disabled={loading || !draft.trim()}
-                  className="flex size-9 shrink-0 items-center justify-center rounded-md bg-ink text-paper transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex size-10 shrink-0 items-center justify-center rounded-md bg-ink text-paper transition-opacity disabled:cursor-not-allowed disabled:opacity-40 sm:size-9"
                 >
                   <Send size={16} aria-hidden />
                 </button>
               </div>
-              <p className="mt-1.5 px-1 text-[11px] text-muted">Enter to send · Shift+Enter for a new line</p>
+              <p className="mt-1.5 hidden px-1 text-[11px] text-muted sm:block">
+                Enter to send · Shift+Enter for a new line
+              </p>
             </form>
           </motion.section>
         )}
@@ -440,7 +461,8 @@ export default function Chatbot() {
 
       <FabTeaser active={!open} />
 
-      <div className="relative">
+      {/* On phones the open chat covers the screen, so the floating button hides until it's closed */}
+      <div className={`relative ${open ? 'max-sm:hidden' : ''}`}>
         {/* Attention rings: two staggered pulses whenever the chat is closed */}
         {!open && !reduceMotion && (
           <>

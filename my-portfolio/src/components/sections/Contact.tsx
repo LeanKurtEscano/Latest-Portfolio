@@ -3,11 +3,26 @@ import { Send } from 'lucide-react'
 import Reveal from '../ui/Reveal'
 import { siteConfig } from '../../constants/site'
 
-// Messages from the form are delivered to this address through FormSubmit.
+
 const FORM_ENDPOINT = 'https://formsubmit.co/ajax/leankurtescano@gmail.com'
 
-const LIMITS = { subjectMin: 3, subjectMax: 100, messageMin: 10, messageMax: 1000 }
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const LIMITS = {
+  subjectMin: 3,
+  subjectMax: 100,
+  messageMin: 10,
+  messageMax: 1000,
+  emailMax: 254,
+  messageMinWords: 1,
+}
+
+/**
+ * Strict email check:
+ * - local part starts/ends with a letter or digit (no leading/trailing dot or symbol)
+ * - domain has at least one dot, labels can't start/end with a hyphen
+ * - the last part (TLD) is letters only, 2+ characters
+ */
+const EMAIL_RE =
+  /^[A-Za-z0-9](?:[A-Za-z0-9._%+-]*[A-Za-z0-9])?@(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+[A-Za-z]{2,24}$/
 
 type Values = { email: string; subject: string; message: string }
 type Errors = Partial<Record<keyof Values, string>>
@@ -16,25 +31,105 @@ type Status = 'idle' | 'sending' | 'success' | 'error'
 const EMPTY: Values = { email: '', subject: '', message: '' }
 const NOT_TOUCHED = { email: false, subject: false, message: false }
 
+function emailProblem(email: string): string | undefined {
+  if (!email) return 'Enter your email.'
+  if (/\s/.test(email)) return 'Email cannot contain spaces.'
+  if (email.length > LIMITS.emailMax) return 'That email is too long.'
+  if (email.includes('..')) return 'Email cannot contain two dots in a row.'
+  const [local = ''] = email.split('@')
+  if (local.length > 64) return 'The part before @ is too long.'
+  if (!EMAIL_RE.test(email)) return 'Enter a valid email address, like name@example.com.'
+  return undefined
+}
+
+/**
+ * Rejects text that is obviously not a real message:
+ * only symbols/numbers, "aaaaaaa", "asdfasdfasdf", keyboard mashing, giant unbroken words.
+ */
+function textProblem(raw: string, label: 'Subject' | 'Message', minWords: number): string | undefined {
+  const text = raw.trim()
+  const lettersOnly = text.match(/\p{L}/gu) ?? []
+  const words = text.split(/\s+/).filter(Boolean)
+
+  // Needs real letters, not just numbers or symbols
+  if (lettersOnly.length < (label === 'Message' ? 5 : 2)) {
+    return `${label} needs real words, not just numbers or symbols.`
+  }
+
+  if (words.length < minWords) {
+    return `${label} needs at least ${minWords} words.`
+  }
+
+  // Same letter or digit 6+ times in a row: "aaaaaa", "111111" ("Soooo" is fine)
+  if (/([\p{L}\p{N}])\1{5,}/iu.test(text)) {
+    return `${label} has too many repeated characters in a row.`
+  }
+
+  // Same symbol 8+ times in a row: "!!!!!!!!"
+  if (/([^\s\p{L}\p{N}])\1{7,}/u.test(text)) {
+    return `${label} has too many repeated symbols.`
+  }
+
+  // 3-4 character pattern repeated 4+ times: "asdfasdfasdfasdf" ("hahaha" is fine)
+  if (/([\p{L}\p{N}]{3,4})\1{3,}/iu.test(text)) {
+    return `${label} looks like repeated text. Please write a real ${label.toLowerCase()}.`
+  }
+
+  // Very few different letters: "abababab"
+  const uniqueLetters = new Set(lettersOnly.map((c) => c.toLowerCase())).size
+  if (text.length >= LIMITS.messageMin && uniqueLetters < 3) {
+    return `${label} looks like random text. Please write a real ${label.toLowerCase()}.`
+  }
+
+  // Keyboard mashing: 7+ consonants in a row ("sdfghjkl")
+  if (/[bcdfghjklmnpqrstvwxz]{7,}/i.test(text)) {
+    return `${label} looks like random typing. Please write a real ${label.toLowerCase()}.`
+  }
+
+  // One giant word with no spaces (links are fine)
+  if (words.some((w) => w.length > 40 && !/^https?:\/\//i.test(w))) {
+    return `${label} has a word that is too long. Add spaces between words.`
+  }
+
+  return undefined
+}
+
 function validate({ email, subject, message }: Values): Errors {
   const errors: Errors = {}
   const e = email.trim()
   const s = subject.trim()
   const m = message.trim()
 
-  if (!e) errors.email = 'Enter your email.'
-  else if (!EMAIL_RE.test(e)) errors.email = 'Enter a valid email address.'
+  const emailError = emailProblem(e)
+  if (emailError) errors.email = emailError
 
   if (!s) errors.subject = 'Enter a subject.'
   else if (s.length < LIMITS.subjectMin) errors.subject = `Subject needs at least ${LIMITS.subjectMin} characters.`
   else if (s.length > LIMITS.subjectMax) errors.subject = `Subject can be at most ${LIMITS.subjectMax} characters.`
+  else {
+    const problem = textProblem(s, 'Subject', 1)
+    if (problem) errors.subject = problem
+  }
 
   if (!m) errors.message = 'Enter a message.'
   else if (m.length < LIMITS.messageMin) errors.message = `Message needs at least ${LIMITS.messageMin} characters.`
   else if (m.length > LIMITS.messageMax) errors.message = `Message can be at most ${LIMITS.messageMax} characters.`
+  else {
+    const problem = textProblem(m, 'Message', LIMITS.messageMinWords)
+    if (problem) errors.message = problem
+  }
 
   return errors
 }
+
+/** Collapses runs of spaces and blank lines so messages arrive clean. */
+const cleanSingleLine = (value: string) => value.replace(/\s+/g, ' ').trim()
+const cleanMultiLine = (value: string) =>
+  value
+    .replace(/[ \t]+/g, ' ')
+    .replace(/ *\n */g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
 
 const fieldClass = (invalid: boolean) =>
   [
@@ -69,18 +164,22 @@ export default function Contact() {
     // Honeypot: real visitors never fill this hidden field, bots usually do.
     if ((form.elements.namedItem('_honey') as HTMLInputElement | null)?.value) return
 
+    const email = values.email.trim().toLowerCase()
+    const subject = cleanSingleLine(values.subject)
+    const message = cleanMultiLine(values.message)
+
     setStatus('sending')
     try {
       const res = await fetch(FORM_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
-          _subject: values.subject.trim(), // becomes the subject line of the email you receive
+          _subject: subject, // becomes the subject line of the email you receive
           _captcha: 'false',
           _template: 'table',
-          email: values.email.trim(),      // FormSubmit uses this as the Reply-To address
-          subject: values.subject.trim(),
-          message: values.message.trim(),
+          email, // FormSubmit uses this as the Reply-To address
+          subject,
+          message,
         }),
       })
       const data = await res.json().catch(() => ({}))
@@ -111,7 +210,11 @@ export default function Contact() {
               id="contact-email"
               name="email"
               type="email"
+              inputMode="email"
               autoComplete="email"
+              autoCapitalize="none"
+              spellCheck={false}
+              maxLength={LIMITS.emailMax}
               value={values.email}
               onChange={handleChange('email')}
               onBlur={handleBlur('email')}
